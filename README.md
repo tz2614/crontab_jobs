@@ -1,6 +1,6 @@
 ## Crontab jobs
   - By Tengyue Zheng
-  - 24/01/2020
+  - 07/02/2020
   email: tengyue.zheng@mft.nhs.uk
 
 ## Description
@@ -35,7 +35,7 @@
 
 ## User Requirements:
 
-  1. Delete all '.bam' and 'bam.bai' in /mnt/cmftgen5/temp/
+  1. Delete all '.bam' and 'bam.bai' in <path/to/dir>
 
 ## Instructions:
 
@@ -45,29 +45,38 @@
   2. Load dependencies
 
   ```Bash
-  $ module load apps/python/2.7.8/gcc-4.8.5
+  $ module add apps/python/2.7.8/gcc-4.8.5
   ``` 
   3. Test your script
 
   ```Bash
-  $ python /users/tz1/bin/crontab/file_deletion.py /mnt/cmftgen5/temp/ .bam 90 /mnt/repository/Bioinformatics/tengyue_zheng_projects/crontab/2020-01-24.bam.bai.deletion.log
+  $ python crontab_jobs/file_deletion.py <path/to/dir> .bam 90 <path/to/dir>/2020-01-24.bam.deletion.log
 
-  $ sh /users/tz1/bin/crontab/temp_dir_bam_bai_deletion.sh
+  $ sh crontab_jobs/temp_dir_bam_bai_deletion.sh
   ```
 
   4. Set crontab job
   ```Bash
   $ cd /etc/cron/.d
   $ sudo crontab -e 
-  $ 00 00 01 * * tz1 /users/tz1/bin/crontab/temp_dir_bam_bai_deletion.sh
+  $ 00 00 01 * * tz1 crontab/temp_dir_bam_bai_deletion.sh
   ```
   5. Check the output of crontab job
 
   It should display the information on terminal:
 
   ```Bash
+  $ CORRECT tmp_dir: /mnt/cmftgen5/temp/
+  $ file types: ['.bam', '.bam.bai', '.bai']
+  $ generate a list of files with above file types
   $ list of files in /mnt/cmftgen5/temp/ generated
-  $ file type: .bam
+  $ CORRECT dirpath: /mnt/cmftgen5/temp/APC/
+  $ CORRECT dirpath: /mnt/cmftgen5/temp/APC_MUTYH/
+  $ CORRECT dirpath: /mnt/cmftgen5/temp/BEST1_LLM/
+  $ CORRECT dirpath: /mnt/cmftgen5/temp/BRCA/
+  $ CORRECT dirpath: /mnt/cmftgen5/temp/Breast_cancer_LLM/
+  $ ...
+  $ CORRECT dirpath: /mnt/cmftgen5/temp/X_linked_RP_LLM/
   $ START checking modified date of each file:
   $ over_duration: 2017-04-24 16:40:51.991517 /mnt/cmftgen5/temp/AZ_project/WS64688/118BM13.sorted.nodup.bam
   $ over_duration: 2017-04-24 16:41:36.413676 /mnt/cmftgen5/temp/AZ_project/WS64688/142M13B.sorted.nodup.bam
@@ -80,14 +89,13 @@
   $ over_duration: 2014-06-11 14:24:12.645458 /mnt/cmftgen5/temp/Andrew/AZ/WS59488/AZ15.sorted.nodup.bam
   $ ...
   $ check COMPLETE
-  $ LOG for modified dates and file paths created: /mnt/repository/Bioinformatics/tengyue_zheng_projects/crontab/2020-01-24.bam.bai.deletion.log
-  ```
+  $ LOG for modified dates and file paths created: <root/path>/crontab_jobs/2020-01-24.bam.bai.deletion.log```
 
 6. When the job is completed, check that log files have been generated.
    If in doubt consult Tengyue Zheng or senior member of the bioinformatics team.
 
    ```Bash
-   $ less /users/tz1/crontab/2020-01-24.bam.bai.deletion.log
+   $ less <path/to/dir>/2020-01-24.bam.bai.deletion.log
    ```
 
    You should see the outputs as above
